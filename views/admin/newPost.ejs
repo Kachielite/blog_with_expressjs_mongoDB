@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../includes/header.ejs') %>
+
+
+    <body>
+
+        <!-- Begin Nav
+    ================================================== -->
+        <%- include('../includes/nav.ejs') %>
+            <!-- End Nav
+    ================================================== -->
+
+            <!-- Begin Article
+    ================================================== -->
+            <div class="container">
+
+
+                <!-- Begin Post -->
+                <div class="col-md-8 col-md-offset-2 col-xs-12">
+                    <main>
+                        <form class="product-form" method="POST">
+                            <div class="form-control">
+                                <label for="title">Title</label>
+                                <input type="text" name="title" id="title">
+                            </div>
+                            <div class="form-control">
+                                <label for="imageUrl">Image URL</label>
+                                <input type="text" name="imageUrl" id="imageUrl">
+                            </div>
+                            <div class="form-control">
+                                <label for="blogpost">Blog Post</label>
+                                <textarea id="my-expressjs-tinymce-app" rows='40'></textarea>
+                            </div>
+
+                            <button class="btn" type="submit">Post</button>
+                        </form>
+                    </main>
+
+                </div>
+                <!-- End Post -->
+                <!-- Begin Footer
+        ================================================== -->
+                <%- include('../includes/footer.ejs') %>
+                    <!-- End Footer
+        ================================================== -->
+
+            </div>
+
+
+
+
+
+    </body>
+
+</html>
