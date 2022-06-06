@@ -20,7 +20,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(blogRoute);
 app.use(adminRoute);
 
-app.listen(3000);
+app.listen(process.env.PORT || 3000, function () {
+    console.log('Node app is working!')});
 
 
 
