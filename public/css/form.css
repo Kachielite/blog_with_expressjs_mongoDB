@@ -21,3 +21,10 @@
 .form-control textarea:focus {
     outline-color: #00695c;
 }
+
+.delete button {
+    border: none;
+    background-color: white;
+    margin-left: 76%;
+    cursor: pointer;
+}

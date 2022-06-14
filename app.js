@@ -2,9 +2,12 @@ const path = require('path');
 
 const express = require('express');
 const bodyParser = require('body-parser');
+const sequelize = require('./utils/db')
 
 const blogRoute = require('./routes/blogRoute');
 const adminRoute = require('./routes/adminRoute');
+const Blogs = require('./models/blogModel');
+const Users = require('./models/userModel')
 
 const app = express();
 
@@ -20,8 +23,13 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(blogRoute);
 app.use(adminRoute);
 
-app.listen(process.env.PORT || 3000, function () {
-    console.log('Node app is working!')});
+Blogs.belongsTo(Users, {constraints: true, onDelete:'CASCADE'});
+Users.hasMany(Blogs)
 
+sequelize.sync().then(results=>{
 
+    app.listen(process.env.PORT || 3000, function () {
+        console.log('Node app is running')});
+
+});
 

@@ -11,37 +11,46 @@
 	================================================== -->
                 <section class="recent-posts">
                     <div class="section-title">
-                        <h2><span>All Blog Posts</span></h2>
-                        <button>
-                            <i class="fa fa-plus" aria-hidden="true"></i>
-                        </button>
+                        <h2><span>
+                            <a href="/admin/add_post" style="color:black; "><i class="fa fa-plus-circle" aria-hidden="true" style="margin-right: 10px"></i>Add a new post</a>
+                        </span></h2>
+
                     </div>
                     <div class="card-columns listrecent">
 
                         <!-- begin post -->
-                        <div class="card">
-                            <a href="post.html">
-                                <img class="img-fluid" src="/img/demopic/5.jpg" alt="">
+
+                        <% for (let blog of blogs) {%>
+                            <div class="card">
+                                <a href="/post/<%= blog.id %>  ">
+                                <img class="img-fluid" src="<%= blog.imageURL %>" alt="">
                             </a>
-                            <div class="card-block">
-                                <h2 class="card-title"><a href="post.html">Autumn doesn't have to be nostalgic, you know?</a></h2>
-                                <h4 class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</h4>
-                                <div class="metafooter">
-                                    <div class="wrapfooter">
-                                        <button>
-                                            <i class="fa fa-pencil" aria-hidden="true"></i>
-                                        </button>
-                                        <button>
-                                            <i class="fa fa-trash-o" aria-hidden="true"></i>
-                                        </button>
-                                        <button>
-                                            <i class="fa fa-eye" aria-hidden="true"></i>
-                                        </button>
+                                <div class="card-block">
+                                    <h2 class="card-title">
+                                        <a href="/post/<%= blog.id %>  ">
+                                            <%= blog.title %>
+                                        </a>
+                                    </h2>
+                                    <div class="card-text">
+                                        <% var article = blog.article%>
+                                            <%- article %>
+                                    </div>
+                                    <div class="metafooter">
+                                        <div class="wrapfooter" id="action-btn">
+                                            <form action="/admin/delete/<%= blog.id %>" method="post" class="delete">
+                                                <a href="/admin/edit/<%= blog.id %> ">
+                                                    <i class="fa fa-pencil fa-2x" aria-hidden="true"></i>
+                                                </a>
+                                                <button type="submit">
+                                                    <i class="fa fa-trash-o fa-2x" aria-hidden="true"></i>
+                                                </button>
+                                            </form>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <!-- end post -->
+                            <% } %>
+                                <!-- end post -->
 
 
                     </div>
