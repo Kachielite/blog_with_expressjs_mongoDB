@@ -1,4 +1,5 @@
 const path = require('path');
+const port = process.env.PORT || 3000;
 
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -34,7 +35,9 @@ mongoose.connect('mongodb+srv://kaci:d6l33EiTqHxc3q1g@blog.4p3uelb.mongodb.net/b
             return;
         }
     });
-    app.listen('3000')
+    app.listen(process.env.PORT || 3000, function(){
+        console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env);
+    });
 }).catch(err =>{
     console.log(err)
 });
