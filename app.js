@@ -1,5 +1,6 @@
 const path = require('path');
 const port = process.env.PORT || 3000;
+require('dotenv').config()
 
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -26,7 +27,7 @@ app.use(adminRoute);
 
 
 
-mongoose.connect('mongodb+srv://kaci:d6l33EiTqHxc3q1g@blog.4p3uelb.mongodb.net/blog?retryWrites=true&w=majority').then(results => {
+mongoose.connect(`mongodb+srv://kaci:${process.env.DB_CRED}@blog.4p3uelb.mongodb.net/blog?retryWrites=true&w=majority`).then(results => {
     User.findOne().then(user=>{
         if (!user){
             const user = new User({name: 'Kachi', email:'kachi@test.com',postId:[]})
