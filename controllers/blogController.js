@@ -1,48 +1,48 @@
-const Blog = require('../models/blogModel');
-const Users = require('../models/userModel');
-const { Op } = require("sequelize");
+const { populate } = require('../models/blogModel');
+const Blogs = require('../models/blogModel');
 
-exports.getAllPosts = (req,res) => {
-    Blog.findAll({
-        include:[{
-            model: Users,
-            required: false
-        }]
-    }).then(blogs =>{
-        res.render('blog/index',{
-            path: '/',
-            pageTitle: 'KachiCode',
-            blogs: blogs,
-            users : blogs.getUser
+exports.getHome = (req, res) =>{
+    Blogs.find().populate('userId').then(blogs =>{
+        res.render('blog/index', {
+            pageTitle: 'Blog',
+            blogs: blogs
         })
-    }).catch(err =>{
+    }).catch(err => {
         console.log(err)
     })
 };
 
-exports.getPost = (req,res) => {
-    let id = req.params.id
+exports.getPostDetails = (req, res) => {
+    const postId = req.params.postId;
+    let blog;
     let blogs;
-    Blog.findAll({
-        where: {[Op.not]: {id:id}},
-        limit: 3
-    }).then(results=>{
-        blogs = results
-        Blog.findByPk(id).then(blog =>{
-            res.render('blog/post',{
-                pageTitle:"View Post",
-                blog: blog,
-                blogs: blogs
-            })
+
+    Blogs.find({_id:{"$ne":postId}}).populate('userId').then(blogPosts =>{
+        blogs = blogPosts;
+        return Blogs.findById(postId).populate('userId')
+    }).then(blogPost =>{
+        blog = blogPost
+        res.render('blog/post',{
+            pageTitle: 'Post details',
+            blog: blog,
+            blogs: blogs
         })
-    }).catch(err=>{
+    }).catch(err => {
         console.log(err)
     })
-};
+    // Blog.findById(postId).populate('userId').then(blog =>{
+    //     res.render('blog/post',{
+    //         pageTitle: 'Post details',
+    //         blog: blog
+    //     })
+    // }).catch(err => {
+    //     console.log(err)
+    // })
+}
 
-exports.getAuthor = (req,res) => {
+exports.getAuthorDetails = (req, res) => {
     res.render('blog/author',{
-        path:'/author',
-        pageTitle:'About Author'
+        pageTitle: 'Author details',
+        author: []
     })
-};
+}

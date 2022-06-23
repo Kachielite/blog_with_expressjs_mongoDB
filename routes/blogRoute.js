@@ -4,8 +4,13 @@ const blogController = require('../controllers/blogController');
 
 const route = express.Router();
 
-route.get('/', blogController.getAllPosts);
-route.get('/post/:id', blogController.getPost);
-route.get('/author', blogController.getAuthor);
+//GET Blog homepage
+route.get('/', blogController.getHome);
+
+//GET Post details
+route.get('/post/:postId', blogController.getPostDetails);
+
+//GET Author details
+route.get('/author/:authorId', blogController.getAuthorDetails)
 
 module.exports = route;

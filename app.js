@@ -2,12 +2,12 @@ const path = require('path');
 
 const express = require('express');
 const bodyParser = require('body-parser');
-const sequelize = require('./utils/db')
+const mongoose = require('mongoose');
 
 const blogRoute = require('./routes/blogRoute');
 const adminRoute = require('./routes/adminRoute');
-const Blogs = require('./models/blogModel');
-const Users = require('./models/userModel')
+
+const User = require('./models/userModel')
 
 const app = express();
 
@@ -23,13 +23,20 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(blogRoute);
 app.use(adminRoute);
 
-Blogs.belongsTo(Users, {constraints: true, onDelete:'CASCADE'});
-Users.hasMany(Blogs)
 
-sequelize.sync().then(results=>{
 
-    app.listen(process.env.PORT || 3000, function () {
-        console.log('Node app is running')});
-
+mongoose.connect('mongodb+srv://kaci:d6l33EiTqHxc3q1g@blog.4p3uelb.mongodb.net/blog?retryWrites=true&w=majority').then(results => {
+    User.findOne().then(user=>{
+        if (!user){
+            const user = new User({name: 'Kachi', email:'kachi@test.com',postId:[]})
+            user.save();
+        } else{
+            return;
+        }
+    });
+    app.listen('3000')
+}).catch(err =>{
+    console.log(err)
 });
+
 

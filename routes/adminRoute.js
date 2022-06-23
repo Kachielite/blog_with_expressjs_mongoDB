@@ -1,20 +1,27 @@
 const express = require('express');
-
 const adminController = require('../controllers/adminController');
 
 const route = express.Router();
 
-// GET 
-route.get('/admin', adminController.getAdminPage);
-route.get('/admin/blog', adminController.getAllPost)
-route.get('/admin/add_post', adminController.addNewPost);
-route.get('/admin/edit/:id', adminController.editPost);
+//GET Admin login
+route.get('/admin', adminController.getAdminLoginPage);
 
-//POST
-route.post('/admin/posts', adminController.login);
-route.post('/admin/post_blog', adminController.postNewPost);
-route.post('/admin/update/:id', adminController.postUpdate);
-route.post('/admin/delete/:id', adminController.deletePost);
+//GET Admin Dashboard
+route.get('/admin/blog', adminController.getAdminDashboard);
 
+//GET Edit Page
+route.get('/admin/edit/:postId', adminController.editPost);
+
+//POST update
+route.post('/admin/update/:postId', adminController.postUpdate);
+
+//GET New Post Page
+route.get('/admin/add_post', adminController.getEditPostPage);
+
+//POST new post
+route.post('/admin/post_blog', adminController.postNewBlogPost);
+
+//Delete post
+route.post('/admin/delete/:postId', adminController.deletePost);
 
 module.exports = route;

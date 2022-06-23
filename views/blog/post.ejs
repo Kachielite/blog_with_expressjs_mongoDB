@@ -67,7 +67,7 @@
                                         <% var date = blog.createdAt %> 
                                         <% var myDate = new Date(date)%>
                                         <% var month = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'] %>
-                                        <%- myDate.getDate() + ' ' + month[(myDate.getMonth() + 1)] + ' ' + myDate.getFullYear() %> 
+                                        <%- myDate.getDate() + ' ' + month[(myDate.getMonth())] + ' ' + myDate.getFullYear() %> 
                                     </span>
                                     <!-- <span class="dot"></span> -->
                                     <!-- <span class="post-read">6 min read</span> -->
@@ -118,8 +118,8 @@
             <div class="graybg">
                 <div class="container">
                     <div class="row listrecent listrelated">
-                        <!-- begin post -->
-                        <% for (let blog of blogs) {%>
+                        <% for (let blog of blogs) { %>
+                            <!-- begin post -->
                             <div class="col-md-4">
                                 <div class="card">
                                     <a href="/post/<%= blog.id %>  ">
@@ -141,7 +141,7 @@
                                     <a href="author.html"><img class="author-thumb" src="https://www.gravatar.com/avatar/e56154546cf4be74e393c62d1ae9f9d4?s=250&amp;d=mm&amp;r=x" alt="Sal"></a>
                                     </span>
                                                 <span class="author-meta">
-                                    <span class="post-name"><a href="author.html">Sal</a></span><br/>
+                                                <span class="post-name"><a href="author.html"><%= blog.userId.name %> </a></span><br/>
                                                 <span class="post-date">
                                                     <% var date = blog.createdAt %> 
                                                     <% var myDate = new Date(date)%>
@@ -158,9 +158,8 @@
                                     </div>
                                 </div>
                             </div>
+                            <!-- end post -->
                             <% } %>
-                                <!-- end post -->
-
 
 
                     </div>
