@@ -36,20 +36,20 @@
     <div class="limiter">
         <div class="container-login100">
             <div class="wrap-login100">
-                <form class="login100-form validate-form" method="post" action="/admin/posts">
+                <form class="login100-form validate-form" method="post" action="/auth/login">
                     <span class="login100-form-title p-b-43">
 						Login to continue
 					</span>
 
-                    <% if(errMessage === true){ %>
+                    <% if(message === true){ %>
                         <p style="color: red;">Please use test@co.co as email and password as password</p>
                         <% } else { %>
-                            <p>Use test@co.co as email and password as password</p>
                             <% } %>
-                                <div class="wrap-input100 validate-input" data-validate="Valid email is required: ex@abc.xyz">
-                                    <input class="input100" type="text" name="email">
+
+                                <div class="wrap-input100 validate-input" data-validate="Username is required">
+                                    <input class="input100" type="text" name="username">
                                     <span class="focus-input100"></span>
-                                    <span class="label-input100">Email</span>
+                                    <span class="label-input100">Username</span>
                                 </div>
 
 
@@ -76,18 +76,18 @@
 
 
                                 <div class="container-login100-form-btn">
-                                    <button class="login100-form-btn">
+                                    <button class="login100-form-btn" style="color: black; background-color: #ea9c0c">
 							Login
 						</button>
                                 </div>
 
                                 <div class="text-center p-t-46 p-b-20">
                                     <span class="txt2">
-							or sign up using
+                                        Don’t have an account? <a href="/register"> Sign up</a>
 						</span>
                                 </div>
 
-                                <div class="login100-form-social flex-c-m">
+                                <!-- <div class="login100-form-social flex-c-m">
                                     <a href="#" class="login100-form-social-item flex-c-m bg1 m-r-5">
                                         <i class="fa fa-facebook-f" aria-hidden="true"></i>
                                     </a>
@@ -95,10 +95,10 @@
                                     <a href="#" class="login100-form-social-item flex-c-m bg2 m-r-5">
                                         <i class="fa fa-twitter" aria-hidden="true"></i>
                                     </a>
-                                </div>
+                                </div> -->
                 </form>
 
-                <div class="login100-more" style="background-image: url('/img/bg-01.jpg');">
+                <div class="login100-more" style="background-image: url('https://images.unsplash.com/photo-1543599538-a6c4f6cc5c05?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=987&q=80');">
                 </div>
             </div>
         </div>

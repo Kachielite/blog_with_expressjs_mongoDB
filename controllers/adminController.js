@@ -2,15 +2,6 @@ const Blog = require('../models/blogModel');
 const User = require('../models/userModel');
 let alert = require('alert'); 
 
-//Admin Login 
-exports.getAdminLoginPage = (req, res) => {
-    let errMessage = false
-    res.render('admin/index',{
-        pageTitle:'Admin Dashboard',
-        errMessage: errMessage
-    })
-};
-
 // Admin Dashboard
 exports.getAdminDashboard = (req, res) =>{
     Blog.find().then(blogs => {

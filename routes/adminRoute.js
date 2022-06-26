@@ -3,11 +3,8 @@ const adminController = require('../controllers/adminController');
 
 const route = express.Router();
 
-//GET Admin login
-route.get('/admin', adminController.getAdminLoginPage);
-
 //GET Admin Dashboard
-route.get('/admin/blog', adminController.getAdminDashboard);
+route.get('/admin', adminController.getAdminDashboard);
 
 //GET Edit Page
 route.get('/admin/edit/:postId', adminController.editPost);
