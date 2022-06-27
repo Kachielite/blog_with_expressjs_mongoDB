@@ -16,4 +16,7 @@ route.get('/register', authController.getRegistration);
 //POST Registration
 route.post('/auth/register', authController.postRegistration);
 
+//POST LOGOUT
+route.post('/logout', authController.postLogout);
+
 module.exports = route;

@@ -5,7 +5,8 @@ exports.getHome = (req, res) =>{
     Blogs.find().populate('userId').then(blogs =>{
         res.render('blog/index', {
             pageTitle: 'Blog',
-            blogs: blogs
+            blogs: blogs,
+            isAuth: req.session.isLoggedIn
         })
     }).catch(err => {
         console.log(err)
@@ -25,7 +26,8 @@ exports.getPostDetails = (req, res) => {
         res.render('blog/post',{
             pageTitle: 'Post details',
             blog: blog,
-            blogs: blogs
+            blogs: blogs,
+            isAuth: req.session.isLoggedIn
         })
     }).catch(err => {
         console.log(err)
@@ -43,6 +45,7 @@ exports.getPostDetails = (req, res) => {
 exports.getAuthorDetails = (req, res) => {
     res.render('blog/author',{
         pageTitle: 'Author details',
-        author: []
+        author: [],
+        isAuth: req.session.isLoggedIn
     })
 }

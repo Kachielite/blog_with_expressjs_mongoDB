@@ -4,10 +4,11 @@ let alert = require('alert');
 
 // Admin Dashboard
 exports.getAdminDashboard = (req, res) =>{
-    Blog.find().then(blogs => {
+    User.findById(req.session.user).populate('postId').then(blogs => {
         res.render('admin/blog',{
             pageTitle:'Admin Dashboard',
-            blogs: blogs
+            blogs: blogs.postId,
+            isAuth: req.session.isLoggedIn
         })
     }).catch(err =>{
         console.log(err)
@@ -20,7 +21,8 @@ exports.editPost = (req, res) =>{
     Blog.findOne({_id: postId }).then(blog =>{
         res.render('admin/editBlog',{
             pageTitle:'Edit Post',
-            blog:blog
+            blog:blog,
+            isAuth: req.session.isLoggedIn
         })
         
     })
@@ -41,7 +43,7 @@ exports.postUpdate = (req, res) => {
         return blog.save();
     }).then(results =>{
         alert('Blog successfully updated');
-        res.redirect('/admin/blog');
+        res.redirect('/admin');
     }).catch(err =>{
         console.log(err)
     })
@@ -50,7 +52,8 @@ exports.postUpdate = (req, res) => {
 // New Post 
 exports.getEditPostPage = (req, res) => {
     res.render('admin/newPost',{
-        pageTitle: 'New Post'
+        pageTitle: 'New Post',
+        isAuth: req.session.isLoggedIn
     }) 
 };
 
@@ -62,16 +65,16 @@ exports.postNewBlogPost = (req, res) => {
     const article = req.body.article;
     let id;
 
-    const blog = new Blog({title: title, imageURL: imageURL, article: article, userId: '62b33bebe76af7b17598fe12'})
+    const blog = new Blog({title: title, imageURL: imageURL, article: article, userId: req.session.user._id})
     blog.save().then(results =>{
         id = results._id;
-        return User.findOne()
+        return User.findById(req.session.user)
     }).then(user =>{
         user.postId.push(id)
         return user.save();
     }).then(results =>{
         alert('Blog successfully added')
-        res.redirect('/admin/blog')
+        res.redirect('/admin')
     }).catch(err =>{
         console.log(err)
     })
@@ -82,7 +85,7 @@ exports.deletePost = (req, res) => {
     const postId = req.params.postId;
     Blog.findOneAndRemove({_id: postId}).then(results=>{
         alert('Blog successfully deleted');
-        res.redirect('/admin/blog');
+        res.redirect('/admin');
     }).catch(err =>{
         console.log(err)
     })

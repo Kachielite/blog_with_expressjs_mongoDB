@@ -19,38 +19,41 @@
                     <div class="card-columns listrecent">
 
                         <!-- begin post -->
-
-                        <% for (let blog of blogs) {%>
-                            <div class="card">
-                                <a href="/post/<%= blog.id %>  ">
+                        <% if(!blogs) {%>
+                            <h1>No blog article available</h1>
+                            <% } else { %>
+                                <% for (let blog of blogs) {%>
+                                    <div class="card">
+                                        <a href="/post/<%= blog.id %>  ">
                                 <img class="img-fluid" src="<%= blog.imageURL %>" alt="">
                             </a>
-                                <div class="card-block">
-                                    <h2 class="card-title">
-                                        <a href="/post/<%= blog.id %>  ">
-                                            <%= blog.title %>
-                                        </a>
-                                    </h2>
-                                    <div class="card-text">
-                                        <% var article = blog.article%>
-                                            <%- article %>
-                                    </div>
-                                    <div class="metafooter">
-                                        <div class="wrapfooter" id="action-btn">
-                                            <form action="/admin/delete/<%= blog.id %>" method="post" class="delete">
-                                                <a href="/admin/edit/<%= blog.id %> ">
-                                                    <i class="fa fa-pencil fa-2x" aria-hidden="true"></i>
+                                        <div class="card-block">
+                                            <h2 class="card-title">
+                                                <a href="/post/<%= blog.id %>  ">
+                                                    <%= blog.title %>
                                                 </a>
-                                                <button type="submit">
+                                            </h2>
+                                            <div class="card-text">
+                                                <% var article = blog.article%>
+                                                    <%- article %>
+                                            </div>
+                                            <div class="metafooter">
+                                                <div class="wrapfooter" id="action-btn">
+                                                    <form action="/admin/delete/<%= blog.id %>" method="post" class="delete">
+                                                        <a href="/admin/edit/<%= blog.id %> ">
+                                                            <i class="fa fa-pencil fa-2x" aria-hidden="true"></i>
+                                                        </a>
+                                                        <button type="submit">
                                                     <i class="fa fa-trash-o fa-2x" aria-hidden="true"></i>
                                                 </button>
-                                            </form>
+                                                    </form>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                            <% } %>
-                                <!-- end post -->
+                                    <% } %>
+                                        <% } %>
+                                            <!-- end post -->
 
 
                     </div>

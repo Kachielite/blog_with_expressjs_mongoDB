@@ -123,7 +123,7 @@
                             <div class="col-md-4">
                                 <div class="card">
                                     <a href="/post/<%= blog.id %>  ">
-                                    <img class="img-fluid img-thumb" src="<%= blog.imageURL %>" alt="">
+                                    <img style="height: 14rem; width: 100%" src="<%= blog.imageURL %>" alt="">
                                 </a>
                                     <div class="card-block">
                                         <h2 class="card-title">
@@ -138,10 +138,10 @@
                                         <div class="metafooter">
                                             <div class="wrapfooter">
                                                 <span class="meta-footer-thumb">
-                                    <a href="author.html"><img class="author-thumb" src="https://www.gravatar.com/avatar/e56154546cf4be74e393c62d1ae9f9d4?s=250&amp;d=mm&amp;r=x" alt="Sal"></a>
+                                    <a href="author.html"><img class="author-thumb" src="https://www.gravatar.com/avatar?d=mp" alt="Sal"></a>
                                     </span>
                                                 <span class="author-meta">
-                                                <span class="post-name"><a href="author.html"><%= blog.userId.name %> </a></span><br/>
+                                                <span class="post-name"><a href="author.html"><%= blog.userId.username %> </a></span><br/>
                                                 <span class="post-date">
                                                     <% var date = blog.createdAt %> 
                                                     <% var myDate = new Date(date)%>
