@@ -8,7 +8,6 @@ exports.getAdminDashboard = (req, res) =>{
         res.render('admin/blog',{
             pageTitle:'Admin Dashboard',
             blogs: blogs.postId,
-            isAuth: req.session.isLoggedIn
         })
     }).catch(err =>{
         console.log(err)
@@ -22,7 +21,6 @@ exports.editPost = (req, res) =>{
         res.render('admin/editBlog',{
             pageTitle:'Edit Post',
             blog:blog,
-            isAuth: req.session.isLoggedIn
         })
         
     })
@@ -52,8 +50,7 @@ exports.postUpdate = (req, res) => {
 // New Post 
 exports.getEditPostPage = (req, res) => {
     res.render('admin/newPost',{
-        pageTitle: 'New Post',
-        isAuth: req.session.isLoggedIn
+        pageTitle: 'New Post'
     }) 
 };
 

@@ -40,6 +40,7 @@
                                             <div class="metafooter">
                                                 <div class="wrapfooter" id="action-btn">
                                                     <form action="/admin/delete/<%= blog.id %>" method="post" class="delete">
+                                                        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                                                         <a href="/admin/edit/<%= blog.id %> ">
                                                             <i class="fa fa-pencil fa-2x" aria-hidden="true"></i>
                                                         </a>

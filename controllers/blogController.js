@@ -6,7 +6,7 @@ exports.getHome = (req, res) =>{
         res.render('blog/index', {
             pageTitle: 'Blog',
             blogs: blogs,
-            isAuth: req.session.isLoggedIn
+
         })
     }).catch(err => {
         console.log(err)
@@ -27,7 +27,7 @@ exports.getPostDetails = (req, res) => {
             pageTitle: 'Post details',
             blog: blog,
             blogs: blogs,
-            isAuth: req.session.isLoggedIn
+
         })
     }).catch(err => {
         console.log(err)
@@ -46,6 +46,5 @@ exports.getAuthorDetails = (req, res) => {
     res.render('blog/author',{
         pageTitle: 'Author details',
         author: [],
-        isAuth: req.session.isLoggedIn
     })
 }

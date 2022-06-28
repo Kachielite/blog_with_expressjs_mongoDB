@@ -20,6 +20,7 @@
                 <div class="col-md-8 col-md-offset-2 col-xs-12">
                     <main>
                         <form class="product-form" method="POST" action="/admin/post_blog">
+                            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                             <div class="form-control">
                                 <label for="title">Title</label>
                                 <input type="text" name="title">
@@ -32,7 +33,6 @@
                                 <label for="article">Blog Post</label>
                                 <textarea id="my-expressjs-tinymce-app" rows='40' name="article"></textarea>
                             </div>
-
                             <button class="btn" type="submit">Post</button>
                         </form>
                     </main>
