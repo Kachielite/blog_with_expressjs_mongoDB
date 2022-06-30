@@ -180,7 +180,7 @@ exports.forgetPassword = (req, res) => {
             subject: 'Password Reset',
             html: `
             <h1>Kachi Blog</h1>
-            <p>Click this <a href='http://kachi28.herokuapp.com//reset/${token}'>link</a> to reset your password</p>
+            <p>Click this <a href='http://kachi28.herokuapp.com/reset/${token}'>link</a> to reset your password</p>
             `
         })
     }).then(results => {
