@@ -25,6 +25,7 @@ exports.getLogin = (req, res) =>{
         pageTitle: 'Login',
         path: '/login',
         message: req.flash('error'),
+        info: req.flash('info'),
     })
 };
 
@@ -65,7 +66,7 @@ exports.getRegistration = (req, res) =>{
         pageTitle: 'Registration',
         path: '/register',
         message: req.flash('error'),
-        verified: active,
+        info:  req.flash('info')
     })
 };
 
@@ -113,7 +114,7 @@ exports.postRegistration = (req, res) => {
         })
         return user.save();
     }).then(results =>{
-        alert('Registration Successful. Please login to gain access')
+        req.flash('info', 'Registration Successful. Please login to gain access')
         res.redirect('/login')
     }).catch(err =>{
         console.log(err)
@@ -133,6 +134,7 @@ exports.getForgetPasswordPage = (req, res) => {
         pageTitle: 'Reset Password',
         path: '/forget',
         message: req.flash('error'),
+        info:  req.flash('info')
     })
 }
 
@@ -178,11 +180,11 @@ exports.forgetPassword = (req, res) => {
             subject: 'Password Reset',
             html: `
             <h1>Kachi Blog</h1>
-            <p>Click this <a href='http://localhost:3000/reset/${token}'>link</a> to reset your password</p>
+            <p>Click this <a href='http://kachi28.herokuapp.com//reset/${token}'>link</a> to reset your password</p>
             `
         })
     }).then(results => {
-        alert('Message sent to your email.Please check your email for the reset password link')
+        req.flash('info', 'A password reset link has been sent to your email. Kindly check your inbox or spam folder.')
         return res.redirect('/forget')
     }).catch(err =>{
         console.log(err)
@@ -237,7 +239,7 @@ exports.resetPassword = (req, res) => {
         return req.user.save()
 
     }).then(results =>{
-            alert('Password reset successful. Please login to gain access to your dashboard')
+            req.flash('info','Password reset successful. Please login to gain access to your dashboard')
             return res.redirect('/login')
     }).catch(err =>{
         console.log(err)

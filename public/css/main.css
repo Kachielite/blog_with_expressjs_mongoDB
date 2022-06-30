@@ -673,8 +673,10 @@ input.input100 {
 }
 
 .info {
-    background-color: #EA9B0A;
+    background-color: #ea9c0abd;
     margin: 20px auto;
+    border-radius: 10px;
+    padding: 20px auto;
 }
 
 .info p {
