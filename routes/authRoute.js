@@ -19,4 +19,18 @@ route.post('/auth/register', authController.postRegistration);
 //POST LOGOUT
 route.post('/logout', authController.postLogout);
 
+//GET Forget password page
+route.get('/forget', authController.getForgetPasswordPage)
+
+//POST send password reset link
+route.post('/auth/forget', authController.forgetPassword);
+
+//Get reset password page
+route.get('/reset/:token', authController.getResetPassword);
+
+//POST reset password
+route.post('/auth/reset', authController.resetPassword)
+
+
+
 module.exports = route;

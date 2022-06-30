@@ -36,10 +36,12 @@
     <div class="limiter">
         <div class="container-login100">
             <div class="wrap-login100">
-                <form class="login100-form validate-form" method="post" action="/auth/register">
+                <form class="login100-form validate-form" method="post" action="/auth/reset">
                     <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                    <input type="hidden" name="token" value="<%= token %>">
+                    <input type="hidden" name="userId" value="<%= userId %>">
                     <span class="login100-form-title p-b-43">
-                        Register
+                        Reset Password
                     </span>
                     <% if (message.length > 0) { %>
                         <p style="color: red; text-align:center">
@@ -47,42 +49,21 @@
                         </p>
                         <% } %>
                             <div class="wrap-input100 validate-input">
-                                <input class="input100" type="text" name="username" required>
-                                <span class="focus-input100"></span>
-                                <span class="label-input100">Username</span>
-                            </div>
-
-                            <div class="wrap-input100 validate-input">
-                                <input class="input100" type="email" name="email" required>
-                                <span class="focus-input100"></span>
-                                <span class="label-input100">email</span>
-                            </div>
-
-                            <div class="wrap-input100 validate-input">
                                 <input class="input100" type="password" name="password" required>
                                 <span class="focus-input100"></span>
                                 <span class="label-input100">Password</span>
                             </div>
-
                             <div class="wrap-input100 validate-input">
                                 <input class="input100" type="password" name="confirmPassword" required>
                                 <span class="focus-input100"></span>
-                                <span class="label-input100">Password</span>
+                                <span class="label-input100">Confirm Password</span>
                             </div>
-
-
 
                             <div class="container-login100-form-btn">
-                                <div class="g-recaptcha" style="margin: 10px auto;" data-sitekey="6LfQN7IgAAAAAMFnKO_20No6hwU55TSlGaAy0NgI"></div>
-                                <button class="login100-form-btn" style="color: white; background-color: #B1022B">
-							Register
-						</button>
-                            </div>
 
-                            <div class="text-center p-t-46 p-b-20">
-                                <span class="txt2">
-							Already have an account? <a href="/login">Login</a>
-						</span>
+                                <button class="login100-form-btn" style="color: white; background-color: #252628">
+							Reset
+						</button>
                             </div>
 
                             <!-- <div class="login100-form-social flex-c-m">
@@ -96,7 +77,7 @@
                                 </div> -->
                 </form>
 
-                <div class="login100-more" style="background-image: url('https://images.unsplash.com/photo-1523154410-31a6b052652b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1365&q=80');">
+                <div class="login100-more" style="background-image: url('https://images.unsplash.com/photo-1631880688671-a1a4eb252edc?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2334&q=80');">
                 </div>
             </div>
         </div>
@@ -122,7 +103,6 @@
     <script src="/vendor/countdowntime/countdowntime.js"></script>
     <!--===============================================================================================-->
     <script src="/js/main.js"></script>
-    <script src='https://www.google.com/recaptcha/api.js'></script>
 
 </body>
 

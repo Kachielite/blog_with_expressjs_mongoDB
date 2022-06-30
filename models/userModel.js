@@ -11,6 +11,12 @@ const userSchema= Schema({
         type: String,
         required: true        
     },
+    email:{
+        type: String,
+        required: true
+    },
+    resetToken: String,
+    resetExpiration: Date,
     postId:[{
                 type: Schema.Types.ObjectId,
                 ref: 'Blog',

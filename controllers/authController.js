@@ -1,5 +1,24 @@
-const User = require('../models/userModel');
+require('dotenv').config()
 const bcrypt = require('bcryptjs');
+const nodemailer = require('nodemailer');
+const mandrillTransport = require('nodemailer-mandrill-transport');
+const crypto = require('crypto');
+const alert = require('alert'); 
+const request = require('request');
+
+
+const User = require('../models/userModel');
+
+let transport = nodemailer.createTransport({
+    host: 'smtp.zoho.com',
+    secure: true,
+    port: 465,
+    auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS
+    }
+});
+
 
 exports.getLogin = (req, res) =>{
     res.render('auth/login',{
@@ -10,9 +29,9 @@ exports.getLogin = (req, res) =>{
 };
 
 exports.postLogin = (req, res) => {
-    User.findOne({username: req.body.username}).then(user =>{
+    User.findOne({$or:[{username: req.body.username}, {email: req.body.username}]}).then(user =>{
         if(!user){
-            req.flash('error', 'User can not be found.');
+            req.flash('error', 'User/Email can not be found.');
             return res.redirect('/login');
         }
         req.session.user = user; 
@@ -46,15 +65,38 @@ exports.getRegistration = (req, res) =>{
         pageTitle: 'Registration',
         path: '/register',
         message: req.flash('error'),
+        verified: active,
     })
 };
 
 exports.postRegistration = (req, res) => {
 
-    User.find({username: req.body.username}).then(user => {
+    if(req.body['g-recaptcha-response'] === undefined || req.body['g-recaptcha-response'] === '' || req.body['g-recaptcha-response'] === null){
+        req.flash('error','Failed captcha verification. Please ensure you check the reCaptcha');
+        return res.redirect('/register')
+    }
+    
+    const secretKey = "6LfQN7IgAAAAAMFnKO_20No6hwU55TSlGaAy0NgI";
+    const verificationURL = "https://www.google.com/recaptcha/api/siteverify?secret=" + secretKey + "&response=" + req.body['g-recaptcha-response'] + "&remoteip=" + req.connection.remoteAddress;
+
+    request(verificationURL,function(error,response,) {
+        if(error){
+            req.flash('error','Failed captcha verification');
+            return res.redirect('/register');
+        } 
+    })
+
+    User.findOne({$or:[{username: req.body.username},{email: req.body.email}]}).then(user => {
         if(user){
-            req.flash('error','Username exist. Please use a different username.');
-            return res.redirect('/register')
+            if(user.username === req.body.username){
+                req.flash('error','Username exist. Please use a different username.');
+                return res.redirect('/register')
+            }
+
+            if(user.email === req.body.email){
+                req.flash('error','Email exist. Please use a different email.');
+                return res.redirect('/register')
+            }
             
         } else if (req.body.password !== req.body.confirmPassword){
             req.flash('error','Passwords do not match. Please check the passwords to ensure they match');
@@ -65,11 +107,13 @@ exports.postRegistration = (req, res) => {
     }).then(hashPassword =>{
         const user = new User({
             username: req.body.username,
+            email: req.body.email,
             password: hashPassword,
             postId: []
         })
         return user.save();
     }).then(results =>{
+        alert('Registration Successful. Please login to gain access')
         res.redirect('/login')
     }).catch(err =>{
         console.log(err)
@@ -83,3 +127,119 @@ exports.postLogout = (req, res) =>{
         res.redirect('/login')
     })
 };
+
+exports.getForgetPasswordPage = (req, res) => {
+    res.render('auth/forget',{
+        pageTitle: 'Reset Password',
+        path: '/forget',
+        message: req.flash('error'),
+    })
+}
+
+exports.forgetPassword = (req, res) => {
+
+    let token 
+
+    if(req.body['g-recaptcha-response'] === undefined || req.body['g-recaptcha-response'] === '' || req.body['g-recaptcha-response'] === null){
+        req.flash('error','Failed captcha verification. Please ensure you check the reCaptcha');
+        return res.redirect('/forget')
+    }
+    
+    const secretKey = "6LfQN7IgAAAAAMFnKO_20No6hwU55TSlGaAy0NgI";
+    const verificationURL = "https://www.google.com/recaptcha/api/siteverify?secret=" + secretKey + "&response=" + req.body['g-recaptcha-response'] + "&remoteip=" + req.connection.remoteAddress;
+
+    request(verificationURL,function(error,response,) {
+        if(error){
+            req.flash('error','Failed captcha verification');
+            return res.redirect('/register');
+        } 
+    })
+    crypto.randomBytes(32, (err, buffer) =>{
+        if(err){
+            console.log(err);
+            req.flash('error', err)
+            return res.redirect('/forget')
+        }
+        token = buffer.toString('hex')
+    })
+
+    User.findOne({email: req.body.email}).then(user =>{
+        if(!user){
+            req.flash('error','Email not found')
+            return res.redirect('/forget')
+        }
+        user.resetToken = token,
+        user.resetExpiration = Date.now()+ 3600000;
+        return user.save()
+    }).then(results => {
+        transport.sendMail({
+            from: 'admin@twiikle.com',
+            to: req.body.email,
+            subject: 'Password Reset',
+            html: `
+            <h1>Kachi Blog</h1>
+            <p>Click this <a href='http://localhost:3000/reset/${token}'>link</a> to reset your password</p>
+            `
+        })
+    }).then(results => {
+        alert('Message sent to your email.Please check your email for the reset password link')
+        return res.redirect('/forget')
+    }).catch(err =>{
+        console.log(err)
+    })
+
+}
+
+exports.getResetPassword = (req, res) => {
+    let token = req.params.token
+
+    User.findOne({resetToken: token, resetExpiration: {$gt: Date.now()}}).then(user =>{
+        if(!user){
+            req.flash('error', 'Invalid Password link. Kindly try resetting the password again');
+            return res.redirect('/forget');
+        }
+        res.render('auth/reset',{
+            pageTitle: 'Reset',
+            path:'/reset',
+            message: req.flash('error'),
+            userId: user._id,
+            token: token
+        })
+    })
+}
+
+exports.resetPassword = (req, res) => {
+    let token = req.body.token
+    let userId = req.body.userId
+
+
+    User.findById(userId).then(user =>{
+        if(!user){
+            req.flash('error', 'Invalid Password link, Kindly try resetting the password again');
+            return res.redirect('/forget');
+        }
+        if(user.resetToken !== token){
+            req.flash('error', 'Invalid reset token, Kindly try resetting the password again');
+            return res.redirect('/forget');            
+        }
+
+        if(req.body.password !== req.body.confirmPassword){
+            req.flash('error', 'Passwords do not match. Please check the passwords and try again');
+            return res.redirect(`/reset/:${user.resetToken}`);
+        }
+
+        req.user = user;
+        return bcrypt.hash(req.body.password, 12)
+    }).then(hashPassword =>{
+        req.user.password = hashPassword
+        req.user.resetToken = undefined;
+        req.user.resetExpiration = undefined;
+        return req.user.save()
+
+    }).then(results =>{
+            alert('Password reset successful. Please login to gain access to your dashboard')
+            return res.redirect('/login')
+    }).catch(err =>{
+        console.log(err)
+    })
+}
