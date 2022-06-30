@@ -227,7 +227,7 @@ exports.resetPassword = (req, res) => {
 
         if(req.body.password !== req.body.confirmPassword){
             req.flash('error', 'Passwords do not match. Please check the passwords and try again');
-            return res.redirect(`/reset/:${user.resetToken}`);
+            return res.redirect(`/reset/${user.resetToken}`);
         }
 
         req.user = user;
