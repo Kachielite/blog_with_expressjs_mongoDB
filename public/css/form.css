@@ -28,3 +28,12 @@
     margin-left: 76%;
     cursor: pointer;
 }
+
+.info p {
+    color: black;
+    text-align: center;
+}
+
+.invalid {
+    border: 2px solid red;
+}

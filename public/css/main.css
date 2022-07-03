@@ -683,3 +683,7 @@ input.input100 {
     color: black;
     text-align: center;
 }
+
+.invalid {
+    border: 2px solid red;
+}

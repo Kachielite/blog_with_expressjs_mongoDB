@@ -42,50 +42,53 @@
                         Register
                     </span>
                     <% if (message.length > 0) { %>
-                        <p style="color: red; text-align:center">
-                            <%= message %>
-                        </p>
-                        <% } %>
-                            <div class="wrap-input100 validate-input">
-                                <input class="input100" type="text" name="username" required>
-                                <span class="focus-input100"></span>
-                                <span class="label-input100">Username</span>
-                            </div>
 
-                            <div class="wrap-input100 validate-input">
-                                <input class="input100" type="email" name="email" required>
-                                <span class="focus-input100"></span>
-                                <span class="label-input100">email</span>
-                            </div>
+                        <% for (let e of message) {%>
+                            <ul>
+                                <li style="color: red;">
+                                    <%= e.msg  %>
+                                </li>
+                            </ul>
+                            <% } %>
+                                <% } %>
+                                    <div class="wrap-input100 validate-input">
+                                        <input class="input100 <%= message.map(e => e.param).includes('username')?'invalid':null %> " type="text" name="username" value="<%=oldData.length> 0 ? oldData[0].username : '' %>" required>
+                                        <span class="focus-input100"></span>
+                                        <span class="label-input100">Username</span>
+                                    </div>
 
-                            <div class="wrap-input100 validate-input">
-                                <input class="input100" type="password" name="password" required>
-                                <span class="focus-input100"></span>
-                                <span class="label-input100">Password</span>
-                            </div>
+                                    <div class="wrap-input100 validate-input">
+                                        <input class="input100 <%= message.map(e => e.param).includes('email')?'invalid':null %>" type="email" name="email" value="<%=oldData.length> 0 ? oldData[0].email : ''%>" required>
+                                        <span class="focus-input100"></span>
+                                        <span class="label-input100">email</span>
+                                    </div>
 
-                            <div class="wrap-input100 validate-input">
-                                <input class="input100" type="password" name="confirmPassword" required>
-                                <span class="focus-input100"></span>
-                                <span class="label-input100">Password</span>
-                            </div>
+                                    <div class="wrap-input100 validate-input">
+                                        <input class="input100 <%= message.map(e => e.param).includes('password')?'invalid':null %>" type="password" name="password" value="<%=oldData.length> 0 ? oldData[0].password : '' %>" required>
+                                        <span class="focus-input100"></span>
+                                        <span class="label-input100">Password</span>
+                                    </div>
 
+                                    <div class="wrap-input100 validate-input">
+                                        <input class="input100 <%= message.map(e => e.param).includes('confirmPassword')?'invalid':null %>  " type="password" name="confirmPassword" value="<%=oldData.length> 0 ? oldData[0].confirmPassword : '' %>" required>
+                                        <span class="focus-input100"></span>
+                                        <span class="label-input100">Confirm Password</span>
+                                    </div>
 
-
-                            <div class="container-login100-form-btn">
-                                <div class="g-recaptcha" style="margin: 10px auto;" data-sitekey="6LfQN7IgAAAAAMFnKO_20No6hwU55TSlGaAy0NgI"></div>
-                                <button class="login100-form-btn" style="color: white; background-color: #B1022B">
+                                    <div class="container-login100-form-btn">
+                                        <div class="g-recaptcha" style="margin: 10px auto;" data-sitekey="6LfQN7IgAAAAAMFnKO_20No6hwU55TSlGaAy0NgI"></div>
+                                        <button class="login100-form-btn" style="color: white; background-color: #B1022B">
 							Register
 						</button>
-                            </div>
+                                    </div>
 
-                            <div class="text-center p-t-46 p-b-20">
-                                <span class="txt2">
+                                    <div class="text-center p-t-46 p-b-20">
+                                        <span class="txt2">
 							Already have an account? <a href="/login">Login</a>
 						</span>
-                            </div>
+                                    </div>
 
-                            <!-- <div class="login100-form-social flex-c-m">
+                                    <!-- <div class="login100-form-social flex-c-m">
                                     <a href="#" class="login100-form-social-item flex-c-m bg1 m-r-5">
                                         <i class="fa fa-facebook-f" aria-hidden="true"></i>
                                     </a>

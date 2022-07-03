@@ -1,6 +1,8 @@
 const Blog = require('../models/blogModel');
 const User = require('../models/userModel');
-let alert = require('alert'); 
+const {validationResult} = require('express-validator/check');
+
+
 
 // Admin Dashboard
 exports.getAdminDashboard = (req, res) =>{
@@ -21,6 +23,7 @@ exports.editPost = (req, res) =>{
         res.render('admin/editBlog',{
             pageTitle:'Edit Post',
             blog:blog,
+            error: req.flash('error'),
         })
         
     })
@@ -28,7 +31,6 @@ exports.editPost = (req, res) =>{
 
 // Post Update
 exports.postUpdate = (req, res) => {
-
     const postId = req.params.postId;
     const updatedTitle = req.body.title;
     const updatedImageURL = req.body.imageURL;
@@ -40,7 +42,6 @@ exports.postUpdate = (req, res) => {
         blog.article = updatedArticle;
         return blog.save();
     }).then(results =>{
-        alert('Blog successfully updated');
         res.redirect('/admin');
     }).catch(err =>{
         console.log(err)
@@ -50,12 +51,26 @@ exports.postUpdate = (req, res) => {
 // New Post 
 exports.getEditPostPage = (req, res) => {
     res.render('admin/newPost',{
-        pageTitle: 'New Post'
+        pageTitle: 'New Post',
+        error: req.flash('error'),
+        oldData: req.flash('oldData')
     }) 
 };
 
 // Post New Post
 exports.postNewBlogPost = (req, res) => {
+
+    const error = validationResult(req)
+
+    if(!error.isEmpty()){
+        req.flash('error', error.array())
+        req.flash('oldData', {
+            title: req.body.title,
+            imageURL: req.body.imageURL,
+            article: req.body.article
+        })
+        return res.status(422).redirect('/admin/add_post')
+    }
 
     const title = req.body.title;
     const imageURL = req.body.imageURL;
@@ -70,7 +85,7 @@ exports.postNewBlogPost = (req, res) => {
         user.postId.push(id)
         return user.save();
     }).then(results =>{
-        alert('Blog successfully added')
+        // req.flash('info','Blog successfully added')
         res.redirect('/admin')
     }).catch(err =>{
         console.log(err)
@@ -80,8 +95,15 @@ exports.postNewBlogPost = (req, res) => {
 //Delete Post
 exports.deletePost = (req, res) => {
     const postId = req.params.postId;
-    Blog.findOneAndRemove({_id: postId}).then(results=>{
-        alert('Blog successfully deleted');
+    Blog.findOneAndRemove({_id: postId}).then(blog=>{
+        // alert('Blog successfully deleted');
+        return blog
+    }).then(blog =>{
+        return User.findById(blog.userId)
+    }).then(user =>{
+        user.postId.pull(postId)
+        return user.save();
+    }).then(results =>{
         res.redirect('/admin');
     }).catch(err =>{
         console.log(err)

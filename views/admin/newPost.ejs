@@ -19,22 +19,33 @@
                 <!-- Begin Post -->
                 <div class="col-md-8 col-md-offset-2 col-xs-12">
                     <main>
-                        <form class="product-form" method="POST" action="/admin/post_blog">
-                            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-                            <div class="form-control">
-                                <label for="title">Title</label>
-                                <input type="text" name="title">
-                            </div>
-                            <div class="form-control">
-                                <label for="imageURL">Image URL (Must be URL of the image for it to display correctly. You can upload images to an online resource and paste the URL here)</label>
-                                <input type="text" name="imageURL" placeholder="http://xxxxxx.com">
-                            </div>
-                            <div class="form-control">
-                                <label for="article">Blog Post</label>
-                                <textarea id="my-expressjs-tinymce-app" rows='40' name="article"></textarea>
-                            </div>
-                            <button class="btn" type="submit">Post</button>
-                        </form>
+                        <% if (error.length > 0) { %>
+
+                            <% for (let e of error) {%>
+                                <ul>
+                                    <li style="color: red;">
+                                        <%= e.msg  %>
+                                    </li>
+                                </ul>
+                                <% } %>
+                                    <% } %>
+
+                                        <form class="product-form" method="POST" action="/admin/post_blog">
+                                            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                                            <div class="form-control <%= error.map(e => e.param).includes('title')?'invalid':null %>">
+                                                <label for="title">Title</label>
+                                                <input type="text" name="title" value="<%=oldData.length> 0 ? oldData[0].title : '' %>">
+                                            </div>
+                                            <div class="form-control <%= error.map(e => e.param).includes('imageURL')?'invalid':null %>">
+                                                <label for="imageURL">Image URL </label>
+                                                <input type="text" name="imageURL" value="<%=oldData.length> 0 ? oldData[0].imageURL : '' %>">
+                                            </div>
+                                            <div class="form-control <%= error.map(e => e.param).includes('article')?'invalid':null%>">
+                                                <label for="article">Blog Post</label>
+                                                <textarea id="my-expressjs-tinymce-app" rows='40' name="article"><%=oldData.length> 0 ? oldData[0].article : '' %></textarea>
+                                            </div>
+                                            <button class="btn" type="submit">Post</button>
+                                        </form>
                     </main>
 
                 </div>

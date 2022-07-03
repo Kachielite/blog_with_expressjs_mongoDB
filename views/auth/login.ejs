@@ -55,18 +55,19 @@
 
                                 <% if(message.length > 0){ %>
                                     <p style="color: red; text-align:center">
-                                        <%= message %>
+                                        <% console.log(message[0]) %>
+                                            <%= message %>
                                     </p>
                                     <% } %>
 
-                                        <div class="wrap-input100 validate-input">
+                                        <div class="wrap-input100 validate-input <%= message[0] === 'User/Email can not be found.' ? 'invalid' : '' %> ">
                                             <input class="input100" type="text" name="username" required>
                                             <span class="focus-input100"></span>
                                             <span class="label-input100">Username/Email</span>
                                         </div>
 
 
-                                        <div class="wrap-input100 validate-input">
+                                        <div class="wrap-input100 validate-input <%= message[0] === 'Incorrect password. Please check the password and try again' ? 'invalid' : '' %> ">
                                             <input class="input100" type="password" name="password" required>
                                             <span class="focus-input100"></span>
                                             <span class="label-input100">Password</span>
