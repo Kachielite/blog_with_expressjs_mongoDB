@@ -5,14 +5,16 @@ const {validationResult} = require('express-validator/check');
 
 
 // Admin Dashboard
-exports.getAdminDashboard = (req, res) =>{
+exports.getAdminDashboard = (req, res, next) =>{
     User.findById(req.session.user).populate('postId').then(blogs => {
         res.render('admin/blog',{
             pageTitle:'Admin Dashboard',
             blogs: blogs.postId,
         })
     }).catch(err =>{
-        console.log(err)
+        const error = new Error(err);
+        error.httpStatusCode = 500;
+        return next(error) 
     })
 };
 
@@ -25,7 +27,6 @@ exports.editPost = (req, res) =>{
             blog:blog,
             error: req.flash('error'),
         })
-        
     })
 };
 
@@ -44,7 +45,9 @@ exports.postUpdate = (req, res) => {
     }).then(results =>{
         res.redirect('/admin');
     }).catch(err =>{
-        console.log(err)
+        const error = new Error(err);
+        error.httpStatusCode = 500;
+        return next(error) 
     })
 }
 
@@ -58,7 +61,7 @@ exports.getEditPostPage = (req, res) => {
 };
 
 // Post New Post
-exports.postNewBlogPost = (req, res) => {
+exports.postNewBlogPost = (req, res, next) => {
 
     const error = validationResult(req)
 
@@ -88,12 +91,14 @@ exports.postNewBlogPost = (req, res) => {
         // req.flash('info','Blog successfully added')
         res.redirect('/admin')
     }).catch(err =>{
-        console.log(err)
+        const error = new Error(err);
+        error.httpStatusCode = 500;
+        return next(error) 
     })
 };
 
 //Delete Post
-exports.deletePost = (req, res) => {
+exports.deletePost = (req, res, next) => {
     const postId = req.params.postId;
     Blog.findOneAndRemove({_id: postId}).then(blog=>{
         // alert('Blog successfully deleted');
@@ -106,7 +111,9 @@ exports.deletePost = (req, res) => {
     }).then(results =>{
         res.redirect('/admin');
     }).catch(err =>{
-        console.log(err)
+        const error = new Error(err);
+        error.httpStatusCode = 500;
+        return next(error) 
     })
 };
 

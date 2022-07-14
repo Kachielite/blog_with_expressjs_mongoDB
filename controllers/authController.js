@@ -28,14 +28,8 @@ exports.getLogin = (req, res) =>{
     })
 };
 
-exports.postLogin = (req, res) => {
-
-    // const error = validationResult(req);
-    // if(!error.isEmpty()){
-    //     console.log(error.array())
-    //     req.flash('error', error.array()[0].msg)
-    //     return res.status(422).redirect('/login')
-    // }
+exports.postLogin = (req, res, next) => {
+    
 
     User.findOne({$or:[{username: req.body.username}, {email: req.body.username}]}).then(user =>{
         if(!user){
@@ -64,7 +58,9 @@ exports.postLogin = (req, res) => {
             return res.redirect('/admin');
         }
     }).catch(err =>{
-        console.log(err)
+        const error = new Error(err);
+        error.httpStatusCode = 500;
+        return next(error) 
     })
 };
 
@@ -78,7 +74,7 @@ exports.getRegistration = (req, res) =>{
     })
 };
 
-exports.postRegistration = (req, res) => {
+exports.postRegistration = (req, res, next) => {
 
 
     if(req.body['g-recaptcha-response'] === undefined || req.body['g-recaptcha-response'] === '' || req.body['g-recaptcha-response'] === null){
@@ -121,7 +117,9 @@ exports.postRegistration = (req, res) => {
         req.flash('info', 'Registration Successful. Please login to gain access')
         res.redirect('/login')
     }).catch(err =>{
-        console.log(err)
+        const error = new Error(err);
+        error.httpStatusCode = 500;
+        return next(error) 
     })
 
 };
@@ -142,7 +140,7 @@ exports.getForgetPasswordPage = (req, res) => {
     })
 }
 
-exports.forgetPassword = (req, res) => {
+exports.forgetPassword = (req, res, next) => {
 
     let token 
 
@@ -191,12 +189,14 @@ exports.forgetPassword = (req, res) => {
         req.flash('info', 'A password reset link has been sent to your email. Kindly check your inbox or spam folder.')
         return res.redirect('/forget')
     }).catch(err =>{
-        console.log(err)
+        const error = new Error(err);
+        error.httpStatusCode = 500;
+        return next(error) 
     })
 
 }
 
-exports.getResetPassword = (req, res) => {
+exports.getResetPassword = (req, res, next) => {
     let token = req.params.token
 
     User.findOne({resetToken: token, resetExpiration: {$gt: Date.now()}}).then(user =>{
@@ -246,6 +246,8 @@ exports.resetPassword = (req, res) => {
             req.flash('info','Password reset successful. Please login to gain access to your dashboard')
             return res.redirect('/login')
     }).catch(err =>{
-        console.log(err)
+        const error = new Error(err);
+        error.httpStatusCode = 500;
+        return next(error) 
     })
 }

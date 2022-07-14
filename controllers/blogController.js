@@ -1,7 +1,7 @@
 const { populate } = require('../models/blogModel');
 const Blogs = require('../models/blogModel');
 
-exports.getHome = (req, res) =>{
+exports.getHome = (req, res, next) =>{
     Blogs.find().populate('userId').then(blogs =>{
         res.render('blog/index', {
             pageTitle: 'Blog',
@@ -9,11 +9,13 @@ exports.getHome = (req, res) =>{
 
         })
     }).catch(err => {
-        console.log(err)
+        const error = new Error(err);
+        error.httpStatusCode = 500;
+        return next(error) 
     })
 };
 
-exports.getPostDetails = (req, res) => {
+exports.getPostDetails = (req, res, next) => {
     const postId = req.params.postId;
     let blog;
     let blogs;
@@ -30,16 +32,10 @@ exports.getPostDetails = (req, res) => {
 
         })
     }).catch(err => {
-        console.log(err)
+        const error = new Error(err);
+        error.httpStatusCode = 500;
+        return next(error) 
     })
-    // Blog.findById(postId).populate('userId').then(blog =>{
-    //     res.render('blog/post',{
-    //         pageTitle: 'Post details',
-    //         blog: blog
-    //     })
-    // }).catch(err => {
-    //     console.log(err)
-    // })
 }
 
 exports.getAuthorDetails = (req, res) => {
