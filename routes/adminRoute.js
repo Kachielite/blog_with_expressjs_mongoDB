@@ -14,6 +14,32 @@ route.get("/admin/edit/:postId", isAuth, adminController.editPost);
 //POST update
 route.post(
   "/admin/update/:postId",
+  [
+    body("title")
+      .not()
+      .isEmpty()
+      .withMessage("Please provide a title for your article")
+      .trim(),
+    body('image')
+      .custom((value, {req}) =>{
+        if(typeof req.file === 'undefined'){
+          return true;
+        }
+        if(req.file.mimetype === 'image/png' || req.file.mimetype === 'image/jpeg' || req.file.mimetype === 'image/jpg'){
+          return true;
+        } else {
+          return false;
+        }
+      })
+      .withMessage('Invalid Image!!!! Image must be JPEG, JPG or PNG'),
+    body("article")
+      .not()
+      .isEmpty()
+      .withMessage("You have not written anything :(")
+      .isLength({ min: 40 })
+      .withMessage("Articles must have a minimum of 40 character")
+      .trim(),
+  ],
   isAuth,
   adminController.postUpdate
 );
@@ -30,13 +56,15 @@ route.post(
       .isEmpty()
       .withMessage("Please provide a title for your article")
       .trim(),
-    body("imageURL")
-      .not()
-      .isEmpty()
-      .withMessage("Please provide an image url for the article. Must be the URL of the image for it to display correctly. You can upload images to an online resource and paste the URL here")
-      .isURL({ protocols: ["http", "https", "ftp"], require_protocol: true })
-      .withMessage("Kindly provide a valid image url")
-      .trim(),
+    body('image')
+      .custom((value, {req}) =>{
+        if(req.file.mimetype === 'image/png' || req.file.mimetype === 'image/jpeg' || req.file.mimetype === 'image/jpg'){
+          return true;
+        } else {
+          return false;
+        }
+      })
+      .withMessage('Invalid Image!!!! Image must be JPEG, JPG or PNG'),
     body("article")
       .not()
       .isEmpty()

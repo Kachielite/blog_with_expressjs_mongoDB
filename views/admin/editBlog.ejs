@@ -19,15 +19,15 @@
                 <!-- Begin Post -->
                 <div class="col-md-8 col-md-offset-2 col-xs-12">
                     <main>
-                        <form class="product-form" method="POST" action="/admin/update/<%= blog.id %>">
+                        <form class="product-form" method="POST" action="/admin/update/<%= blog.id %>" enctype="multipart/form-data">
                             <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                             <div class="form-control">
                                 <label for="title">Title</label>
                                 <input type="text" name="title" value="<%= blog.title %> ">
                             </div>
                             <div class="form-control">
-                                <label for="imageURL">Image URL</label>
-                                <input type="text" name="imageURL" value="<%= blog.imageURL %> " placeholder="http://xxxxxx.com">
+                                <label for="image">Image</label>
+                                <input type="file" name="image" value="<%= blog.image%> ">
                             </div>
                             <div class="form-control">
                                 <label for="article">Blog Post</label>
