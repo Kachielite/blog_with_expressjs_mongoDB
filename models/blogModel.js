@@ -11,6 +11,10 @@ const blogSchema = new Schema({
         type: String,
         required: true
     },
+    image_id:{
+        type: String,
+        required: true
+    },
     article:{
         type: String,
         required: true

@@ -1,10 +1,16 @@
-const fs = require('fs');
-const path = require('path')
+require('dotenv').config();
 const Blog = require('../models/blogModel');
 const User = require('../models/userModel');
 const {validationResult} = require('express-validator/check');
-const deleteFile = require('../utils/deleteFile')
+const deleteFile = require('../utils/deleteFile');
+const cloudinary = require('cloudinary').v2;
 
+//Cloudinary Config
+cloudinary.config({ 
+    cloud_name: 'dahpyu601', 
+    api_key: process.env.CLOUDINARY_API_KEY, 
+    api_secret: process.env.CLOUDINARY_API_SECRET
+});
 
 
 // Admin Dashboard
@@ -50,8 +56,12 @@ exports.postUpdate = (req, res) => {
     Blog.findOne({_id: postId}).then(blog =>{
         blog.title = updatedTitle;
         if(image){
-            deleteFile.deleteFile(blog.image)
-            blog.image = `/${image.path}`
+            cloudinary.uploader.destroy(blog.image_id);
+            cloudinary.uploader.upload(image.path).then(results =>{
+                blog.image = results.secure_url;
+                blog.image_id = results.public_id
+            })
+            // blog.image = `/${image.path}`
         }
         blog.article = updatedArticle;
         return blog.save();
@@ -92,8 +102,14 @@ exports.postNewBlogPost = (req, res, next) => {
     const article = req.body.article;
     let id;
 
-    const blog = new Blog({title: title, image: `/${image}`, article: article, userId: req.session.user._id})
-    blog.save().then(results =>{
+    cloudinary.uploader.upload(image).then(results =>{
+        return results;
+    }).then(results =>{
+        const blog = new Blog({title: title, image: results.secure_url, image_id: results.public_id, article: article, userId: req.session.user._id});
+        return blog;
+    }).then(blog => {
+        return blog.save()
+    }).then(results =>{
         if(req.file === undefined){
             req.flash('error', ['Incorrect Image Format. Must be png, jpeg or jpg'])
             req.flash('oldData', {
@@ -110,7 +126,7 @@ exports.postNewBlogPost = (req, res, next) => {
         return user.save();
     }).then(results =>{
         // req.flash('info','Blog successfully added')
-        res.redirect('/admin')
+        return res.redirect('/admin')
     }).catch(err =>{
         const error = new Error(err);
         error.httpStatusCode = 500;
@@ -122,9 +138,8 @@ exports.postNewBlogPost = (req, res, next) => {
 exports.deletePost = (req, res, next) => {
     const postId = req.params.postId;
     Blog.findById({_id: postId}).then(blog =>{
-        deleteFile.deleteFile(blog.image)
-        return blog
-    }).then(blog =>{
+        return cloudinary.uploader.destroy(blog.image_id)
+    }).then(results =>{
         return Blog.findOneAndRemove({_id: postId})
     }).then(blog=>{
         // alert('Blog successfully deleted');
